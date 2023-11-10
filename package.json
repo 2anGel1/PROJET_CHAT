@@ -1,0 +1,22 @@
+{
+  "name": "projet_chat",
+  "version": "1.0.0",
+  "description": "server appli chat",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "scopy",
+  "license": "ISC",
+  "dependencies": {
+    "@prisma/client": "^5.5.2",
+    "cors": "^2.8.5",
+    "express": "^4.18.2",
+    "http": "^0.0.1-security",
+    "mysql": "^2.18.1",
+    "nodemon": "^3.0.1",
+    "prisma": "^5.5.2",
+    "socket.io": "^4.7.2",
+    "twilio": "^4.19.0"
+  }
+}

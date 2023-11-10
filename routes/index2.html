@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Socket.IO chat</title>
+    <style>
+        body {
+            margin: 0;
+            padding-bottom: 3rem;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        #form {
+            background: rgba(0, 0, 0, 0.15);
+            padding: 0.25rem;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            display: flex;
+            height: 3rem;
+            box-sizing: border-box;
+            backdrop-filter: blur(10px);
+        }
+
+        #writing {
+            position: fixed;
+            bottom: 35px;
+            left: 5px;
+            right: 0;
+            display: none;
+        }
+
+        #input {
+            border: none;
+            padding: 0 1rem;
+            flex-grow: 1;
+            border-radius: 2rem;
+            margin: 0.25rem;
+        }
+
+        #input:focus {
+            outline: none;
+        }
+
+        #form>button {
+            background: #333;
+            border: none;
+            padding: 0 1rem;
+            margin: 0.25rem;
+            border-radius: 3px;
+            outline: none;
+            color: #fff;
+        }
+
+        #messages {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+            width: 100%;
+        }
+
+        #messages>li {
+            padding: 0.5rem 1rem;
+        }
+
+        #messages>li:nth-child(odd) {
+            background: #fff;
+            text-align: end;
+        }
+
+        #box-message {
+            width: 100%;
+            height: 100px;
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="box-message">
+        <ul id="messages">
+        </ul>
+    </div>
+    <form id="form" action="">
+        <p id="writing">est en train d'écrire..</p>
+        <input id="input" autocomplete="off" /><button>Send</button>
+    </form>
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        var socket = io();
+
+        var messages = document.getElementById('messages');
+        var form = document.getElementById('form');
+        var input = document.getElementById('input');
+        var inn = document.getElementsByTagName('input')
+        var writting = document.getElementById("writing")
+
+        const receiverId = '6798c0e5-0477-4f21-8bf7-292e275f7464'
+        const myself = '74ac92cb-f2ff-4bf1-8ee5-86ed9b63b16b'
+
+        input.addEventListener('input', function (e) {
+            e.preventDefault()
+            socket.emit('write', receiverId)
+        });
+
+        form.addEventListener('submit', function (e) {
+            e.preventDefault();
+            if (input.value) {
+                var item = document.createElement('li')
+                item.textContent = input.value
+                messages.appendChild(item)
+
+                setTimeout(() => {
+                    socket.emit('message', { text: input.value, receiverId: receiverId })
+                    input.value = ''
+                }, 2000);
+
+            }
+        });
+
+        socket.on("write-" + myself, (sock) => {
+
+            writting.style.display = "block"
+            setTimeout(() => {
+                console.log('ecrit..');
+                writting.style.display = "none";
+            }, 3000)
+        })
+
+        socket.on(myself, (msg) => {
+            console.log(msg);
+            var item = document.createElement('li');
+            item.textContent = msg;
+            messages.appendChild(item);
+        });
+    </script>
+</body>
+
+</html>
