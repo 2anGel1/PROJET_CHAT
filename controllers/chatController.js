@@ -71,12 +71,14 @@ exports.getUserChats = async (req, res) => {
 exports.storeMessage = async (req, res) => {
     try {
 
-        console.log("storing message...")
+        console.log("storing message...");
+        console.log("DATA MESSAGE TO STORE");
+        console.log(req.body);
 
-        const user1_id = req.body.data.author.id
-        const textmessage = req.body.data.text
-        const user2_id = req.body.receiverId
-        const createdAt = req.body.data.createdAt
+        const user1_id = req.body.author
+        const textmessage = req.body.message
+        const user2_id = req.body.receiver
+        const createdAt = req.body.createdAt
 
         // console.log(textmessage);
 
