@@ -131,9 +131,9 @@
 
         socket.on(myself, (msg) => {
             console.log("i've got a message");
-            // var item = document.createElement('li');
-            // item.textContent = msg;
-            // received.appendChild(item);
+            var item = document.createElement('li');
+            item.textContent = msg.data.text;
+            received.appendChild(item);
         });
     </script>
 </body>
