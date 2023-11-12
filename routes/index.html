@@ -115,8 +115,8 @@
                 item.textContent = input.value
                 sent.appendChild(item)
 
-                setTimeout(() => {
-                    socket.emit('message', JSON.stringify({
+                setTimeout(async () => {
+                    await socket.emit('message', JSON.stringify({
                         type: "Message",
                         data: {
                             author: { id: myself },
