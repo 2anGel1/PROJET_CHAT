@@ -28,9 +28,6 @@ exports.getUserChats = async (req, res) => {
                 messages: true
             }
         })
-
-        console.log(chats.messages);
-
         await Promise.all(
             chats.map(async (item) => {
                 const notSeenMessages = await Message.findMany({
