@@ -116,16 +116,16 @@
                 sent.appendChild(item)
 
                 setTimeout(() => {
-                    socket.emit('message', {
-                        "type": "Message",
-                        "data": {
-                            "author": { "id": myself },
-                            "createdAt": '1699749789756',
-                            "id": 'd720cb74-8208-43d0-9bf0-907d671eb8b7',
-                            "text": input.value
+                    socket.emit('message', JSON.stringify({
+                        type: "Message",
+                        data: {
+                            author: { id: myself },
+                            createdAt: '1699749789756',
+                            id: 'd720cb74-8208-43d0-9bf0-907d671eb8b7',
+                            text: input.value
                         },
-                        "received": receiverId
-                    })
+                        receiverId: receiverId
+                    }))
                     input.value = ''
                 }, 2000);
 
