@@ -92,15 +92,15 @@
     <script>
         var socket = io();
 
-        var sent = document.getElementById('sent');
         var received = document.getElementById('received');
-        var form = document.getElementById('form');
+        var writting = document.getElementById("writing");
+        var inn = document.getElementsByTagName('input');
         var input = document.getElementById('input');
-        var inn = document.getElementsByTagName('input')
-        var writting = document.getElementById("writing")
+        var sent = document.getElementById('sent');
+        var form = document.getElementById('form');
 
         const receiverId = '622f7fb2-52ca-4170-96ee-779b945f5ed3'
-        const myself = '6dea15c5-f37c-4125-a925-fa89e8834455'
+        const myself = 'cadcb03c-bba6-41f4-8c42-67eca94f7973'
         const createdAt = 1699748695664
 
         input.addEventListener('input', function (e) {
