@@ -91,16 +91,11 @@
     <script>
         var socket = io();
 
-        var received = document.getElementById('received');
-        var writting = document.getElementById("writing");
-        var inn = document.getElementsByTagName('input');
         var input = document.getElementById('input');
-        var sent = document.getElementById('sent');
         var form = document.getElementById('form');
 
         const receiverId = '622f7fb2-52ca-4170-96ee-779b945f5ed3'
         const myself = 'cadcb03c-bba6-41f4-8c42-67eca94f7973'
-        const createdAt = 1699748695664
 
         input.addEventListener('input', function (e) {
             e.preventDefault()
@@ -129,19 +124,6 @@
             }
         });
 
-        socket.on("write-" + myself, (sock) => {
-            writting.style.display = "block"
-            setTimeout(() => {
-                writting.style.display = "none";
-            }, 3000)
-        })
-
-        socket.on(myself, (msg) => {
-            console.log("i've got a message");
-            var item = document.createElement('li');
-            item.textContent = msg.data.text;
-            received.appendChild(item);
-        });
     </script>
 </body>
 
