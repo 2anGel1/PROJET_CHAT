@@ -147,6 +147,11 @@
 
         socket.emit("info", JSON.stringify({ user_id: myself }));
 
+        socket.emit("seen", JSON.stringify({
+            chat_id: "ae25cbf0-cdf9-4abb-b436-3e9da6bbd58b",
+            user_id: receiverId
+        }));
+
         input.addEventListener('input', function (e) {
             e.preventDefault();
             socket.emit('write-', receiverId);
