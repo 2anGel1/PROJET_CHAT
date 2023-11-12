@@ -72,8 +72,6 @@ exports.storeMessage = async (req, res) => {
     try {
 
         console.log("storing message...");
-        console.log("DATA MESSAGE TO STORE");
-        console.log(req.body);
 
         const user1_id = req.body.author
         const textmessage = req.body.message
@@ -92,6 +90,7 @@ exports.storeMessage = async (req, res) => {
         if (chat) {
             console.log("chat exists")
         } else {
+            console.log("creating chat..")
             chat = await Chat.create({
                 data: {
                     user1_id: user1_id,

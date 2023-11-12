@@ -108,26 +108,24 @@
             socket.emit('write', receiverId)
         });
 
-        form.addEventListener('submit', function (e) {
+        form.addEventListener('submit', async function (e) {
             e.preventDefault();
             if (input.value) {
                 var item = document.createElement('li')
                 item.textContent = input.value
                 sent.appendChild(item)
 
-                setTimeout(async () => {
-                    await socket.emit('message', JSON.stringify({
-                        type: "Message",
-                        data: {
-                            author: { id: myself },
-                            createdAt: '1699749789756',
-                            id: 'd720cb74-8208-43d0-9bf0-907d671eb8b7',
-                            text: input.value
-                        },
-                        receiverId: receiverId
-                    }))
-                    input.value = ''
-                }, 2000);
+                await socket.emit('message', JSON.stringify({
+                    type: "Message",
+                    fromWeb: true,
+                    data: {
+                        author: { id: myself },
+                        createdAt: Date.now().toString(),
+                        text: input.value
+                    },
+                    receiverId: receiverId
+                }))
+                input.value = ''
 
             }
         });
