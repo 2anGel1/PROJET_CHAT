@@ -37,7 +37,7 @@ exports.getUserChats = async (req, res) => {
                         firstname: true,
                         lastname: true,
                         status: true,
-                        id: true
+                        id: true,
                     }
                 })
                 item.receiverInfo = receiver
@@ -99,6 +99,7 @@ exports.storeMessage = async (req, res) => {
                 createdAt: createdAt,
                 author_id: user1_id,
                 chat_id: chat.id,
+
             }
         })
 

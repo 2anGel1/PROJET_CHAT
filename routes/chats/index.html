@@ -56,23 +56,29 @@
 
         #messages {
             list-style-type: none;
+            height: 100%;
             width: 100%;
-            margin: 0;
             padding: 0;
+            margin: 0;
         }
 
-        #messages>li {
+        #messages>div {
             padding: 0.5rem 1rem;
+            margin: 5px 5px 5px 5px;
+            position: relative;
+            text-align: center;
+            width: 30%;
         }
 
         .sent {
             background: #77CC99;
-            text-align: end;
+            right: 0;
         }
 
         .received {
-            background: #22AC99;;
-            text-align: start;
+            background: #22AC99;
+            ;
+            left: 0px;
         }
 
         #box-message {
@@ -115,7 +121,7 @@
                         return a.createdAt - b.createdAt;
                     });
                     msgs.forEach(mess => {
-                        var item = document.createElement('li');
+                        var item = document.createElement('div');
                         if (mess.author_id == id) {
                             item.classList.add('sent');
                         } else {
@@ -145,6 +151,11 @@
 
         socket.emit("info", JSON.stringify({ user_id: myself }));
 
+        socket.emit("display", JSON.stringify({
+            chat_id: "9a2ccee7-0a67-4be9-9497-28374b12f0ba",
+            user_id: "be188eb5-f41d-425b-9487-758e84b1056b"
+        }));
+
         input.addEventListener('input', function (e) {
             e.preventDefault();
             socket.emit('write-', receiverId);
@@ -153,7 +164,7 @@
         form.addEventListener('submit', async function (e) {
             e.preventDefault();
             if (input.value) {
-                var item = document.createElement('li');
+                var item = document.createElement('div');
                 item.classList.add('sent');
                 item.textContent = input.value;
                 messages.appendChild(item);
@@ -180,7 +191,7 @@
         });
 
         socket.on(myself, (msg) => {
-            var item = document.createElement('li');
+            var item = document.createElement('div');
             item.classList.add('received');
             item.textContent = msg.data.text;
             messages.appendChild(item);

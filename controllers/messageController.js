@@ -65,6 +65,30 @@ exports.deleteMessage = async (req, res) => {
 
 /* --------------------OTHER----------------------- */
 
-exports.sendMessage = async (req, res) => {
+exports.setOtherStatus = async (req, res) => {
+    try {
 
+        console.log("setting messages to " + req.body.status);
+
+        const chat_id = req.body.chat_id;
+        const user_id = req.body.user_id;
+        const status = req.body.status;
+
+        console.log(status);
+
+       await Message.updateMany({
+            where: {
+                chat_id: chat_id,
+                receiver_id: user_id,
+            },
+            data: {
+                status: status
+            }
+        })
+        console.log("Done");
+        return { status: true };
+    } catch (error) {
+        console.error(error);
+        return {error: error.message};
+    }
 }
