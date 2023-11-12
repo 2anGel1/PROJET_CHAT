@@ -29,8 +29,18 @@ exports.getUserChats = async (req, res) => {
             }
         })
 
+        console.log(chats.messages);
+
         await Promise.all(
             chats.map(async (item) => {
+                const notSeenMessages = await Message.findMany({
+                    where: {
+                        chat_id: item.id,
+                        receiver_id: author_id
+                    }
+                });
+                item.notSeen = notSeenMessages.length;
+
                 const receiver = await User.findFirst({
                     where: { id: (author_id == item.user1_id) ? item.user2_id : item.user1_id },
                     select: {
