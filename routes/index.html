@@ -114,6 +114,7 @@
                 var item = document.createElement('li')
                 item.textContent = input.value
                 sent.appendChild(item)
+                input.value = ''
 
                 setTimeout(() => {
                     socket.emit('message', JSON.stringify({
@@ -126,7 +127,6 @@
                         },
                         receiverId: receiverId
                     }))
-                    input.value = ''
                 }, 2000);
 
             }
