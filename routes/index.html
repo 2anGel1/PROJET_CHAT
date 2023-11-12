@@ -99,8 +99,9 @@
         var inn = document.getElementsByTagName('input')
         var writting = document.getElementById("writing")
 
-        const receiverId = '74ac92cb-f2ff-4bf1-8ee5-86ed9b63b16b'
-        const myself = '622f7fb2-52ca-4170-96ee-779b945f5ed3'
+        const receiverId = '622f7fb2-52ca-4170-96ee-779b945f5ed3'
+        const myself = '6dea15c5-f37c-4125-a925-fa89e8834455'
+        const createdAt = 1699748695664
 
         input.addEventListener('input', function (e) {
             e.preventDefault()
@@ -115,7 +116,16 @@
                 sent.appendChild(item)
 
                 setTimeout(() => {
-                    socket.emit('message', { text: input.value, receiverId: receiverId })
+                    socket.emit('message', {
+                        "type": "Message",
+                        "data": {
+                            "author": { "id": myself },
+                            "createdAt": '1699749789756',
+                            "id": 'd720cb74-8208-43d0-9bf0-907d671eb8b7',
+                            "text": input.value
+                        },
+                        "received": receiverId
+                    })
                     input.value = ''
                 }, 2000);
 
