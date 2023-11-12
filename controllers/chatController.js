@@ -71,14 +71,12 @@ exports.getUserChats = async (req, res) => {
 exports.storeMessage = async (req, res) => {
     try {
 
-        console.log("storing message...");
+        console.log("Storing message...");
 
         const user1_id = req.body.author
         const textmessage = req.body.message
         const user2_id = req.body.receiver
         const createdAt = req.body.createdAt
-
-        // console.log(textmessage);
 
         var chat = await Chat.findFirst({
             where: {
@@ -88,9 +86,9 @@ exports.storeMessage = async (req, res) => {
         })
 
         if (chat) {
-            console.log("chat exists")
+            console.log("Chat exists")
         } else {
-            console.log("creating chat..")
+            console.log("Creating chat..")
             chat = await Chat.create({
                 data: {
                     user1_id: user1_id,
