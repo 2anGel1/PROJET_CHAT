@@ -33,7 +33,15 @@ exports.getUserChats = async (req, res) => {
                 const notSeenMessages = await Message.findMany({
                     where: {
                         chat_id: item.id,
-                        receiver_id: author_id
+                        receiver_id: author_id,
+                        OR: [
+                            {
+                                status: "DISPLAYED"
+                            },
+                            {
+                                status: "SENT"
+                            }
+                        ]
                     }
                 });
                 item.notSeen = notSeenMessages.length;
