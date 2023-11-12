@@ -6,20 +6,6 @@ const User = require("../lib/prisma.js").user
 
 const { emitEvent } = require("../lib/websocket")
 
-exports.create = async (req, res) => {
-    try {
-        const chat = await Chat.create({
-            data: {
-                user1_id: req.body.user1_id,
-                user2_id: req.body.user2_id
-            }
-        })
-        res.status(200).json({ status: true, data: chat })
-    } catch (error) {
-        res.status(500).json({ error: error.message })
-    }
-}
-
 exports.getUserChats = async (req, res) => {
     try {
         console.log("getting user chats...")
@@ -73,15 +59,24 @@ exports.storeMessage = async (req, res) => {
 
         console.log("Storing message...");
 
-        const user1_id = req.body.author
         const textmessage = req.body.message
-        const user2_id = req.body.receiver
         const createdAt = req.body.createdAt
+        const user2_id = req.body.receiver
+        const user1_id = req.body.author
 
         var chat = await Chat.findFirst({
             where: {
-                user1_id: user1_id,
-                user2_id: user2_id
+                OR:[
+                    {
+                        user1_id: user1_id,
+                        user2_id: user2_id
+                    },
+                    {
+                        user1_id: user2_id,
+                        user2_id: user1_id
+                    }
+                ]
+              
             }
         })
 

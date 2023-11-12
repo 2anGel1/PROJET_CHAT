@@ -34,13 +34,12 @@ router.post("/messages", MessageController.add);
 
 
 
-
 // CHAT PAGE
 router.get('/chat', (req, res) => {
-    res.sendFile(__dirname + "/index.html")
+    res.sendFile(__dirname + "/chats/index.html")
 })
 router.get('/chat2', (req, res) => {
-    res.sendFile(__dirname + "/index2.html")
+    res.sendFile(__dirname + "/chats/index2.html")
 })
 
 module.exports = router;

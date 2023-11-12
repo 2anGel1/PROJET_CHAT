@@ -2,7 +2,7 @@
 <html>
 
 <head>
-    <title>Socket.IO chat</title>
+    <title>Socket.IO CHAT 2</title>
     <style>
         body {
             margin: 0;
@@ -53,20 +53,18 @@
             color: #fff;
         }
 
-        #messages {
+        .messages {
             list-style-type: none;
             margin: 0;
             padding: 0;
-            width: 100%;
         }
 
-        #messages>li {
+        .messages>li {
             padding: 0.5rem 1rem;
         }
 
-        #messages>li:nth-child(odd) {
-            background: #fff;
-            text-align: end;
+        .messages>li:nth-child(odd) {
+            background: #efefef;
         }
 
         #box-message {
@@ -81,7 +79,9 @@
 
 <body>
     <div id="box-message">
-        <ul id="messages">
+        <ul class="messages" id="sent">
+        </ul>
+        <ul class="messages" id="received">
         </ul>
     </div>
     <form id="form" action="">
@@ -92,49 +92,56 @@
     <script>
         var socket = io();
 
-        var messages = document.getElementById('messages');
+        var sent = document.getElementById('sent');
+        var received = document.getElementById('received');
         var form = document.getElementById('form');
         var input = document.getElementById('input');
         var inn = document.getElementsByTagName('input')
         var writting = document.getElementById("writing")
 
-        const receiverId = '6798c0e5-0477-4f21-8bf7-292e275f7464'
-        const myself = '74ac92cb-f2ff-4bf1-8ee5-86ed9b63b16b'
+        const receiverId = '6dea15c5-f37c-4125-a925-fa89e8834455'
+        const myself = '622f7fb2-52ca-4170-96ee-779b945f5ed3'
+        const createdAt = 1699748695664
 
         input.addEventListener('input', function (e) {
             e.preventDefault()
             socket.emit('write', receiverId)
         });
 
-        form.addEventListener('submit', function (e) {
+        form.addEventListener('submit', async function (e) {
             e.preventDefault();
             if (input.value) {
                 var item = document.createElement('li')
                 item.textContent = input.value
-                messages.appendChild(item)
+                sent.appendChild(item)
 
-                setTimeout(() => {
-                    socket.emit('message', { text: input.value, receiverId: receiverId })
-                    input.value = ''
-                }, 2000);
+                await socket.emit('message', JSON.stringify({
+                    type: "Message",
+                    fromWeb: true,
+                    data: {
+                        author: { id: myself },
+                        createdAt: Date.now().toString(),
+                        text: input.value
+                    },
+                    receiverId: receiverId
+                }))
+                input.value = ''
 
             }
         });
 
         socket.on("write-" + myself, (sock) => {
-
             writting.style.display = "block"
             setTimeout(() => {
-                console.log('ecrit..');
                 writting.style.display = "none";
             }, 3000)
         })
 
         socket.on(myself, (msg) => {
-            console.log(msg);
+            console.log("i've got a message");
             var item = document.createElement('li');
-            item.textContent = msg;
-            messages.appendChild(item);
+            item.textContent = msg.data.text;
+            received.appendChild(item);
         });
     </script>
 </body>
