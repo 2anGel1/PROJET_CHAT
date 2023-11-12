@@ -27,12 +27,14 @@ model Chat {
 }
 
 model Message {
-  id        String  @id @default(uuid())
-  content   String  @db.Text
-  chat_id   String
-  status    MStatus @default(SENT)
-  chat      Chat    @relation(fields: [chat_id], references: [id])
-  createdAt String
+  id          String  @id @default(uuid())
+  content     String  @db.Text
+  chat_id     String
+  author_id   String
+  receiver_id String
+  status      MStatus @default(SENT)
+  chat        Chat    @relation(fields: [chat_id], references: [id])
+  createdAt   String
 }
 
 enum MStatus {

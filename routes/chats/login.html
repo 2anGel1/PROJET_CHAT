@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Socket.IO CHAT1</title>
+    <style>
+        body {
+            margin: 0;
+            padding-bottom: 3rem;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        #form {
+            background: rgba(0, 0, 0, 0.15);
+            padding: 0.25rem;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            display: flex;
+            height: 3rem;
+            box-sizing: border-box;
+            backdrop-filter: blur(10px);
+        }
+
+        #writing {
+            position: fixed;
+            bottom: 35px;
+            left: 5px;
+            right: 0;
+            display: none;
+        }
+
+        #input {
+            border: none;
+            padding: 0 1rem;
+            flex-grow: 1;
+            border-radius: 2rem;
+            margin: 0.25rem;
+        }
+
+        #input:focus {
+            outline: none;
+        }
+
+        #form>button {
+            background: #333;
+            border: none;
+            padding: 0 1rem;
+            margin: 0.25rem;
+            border-radius: 3px;
+            outline: none;
+            color: #fff;
+        }
+
+        .messages {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        .messages>li {
+            padding: 0.5rem 1rem;
+        }
+
+        .messages>li:nth-child(odd) {
+            background: #efefef;
+        }
+
+        #box-message {
+            width: 100%;
+            height: 100px;
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="box-message">
+        <ul class="messages" id="sent">
+        </ul>
+        <ul class="messages" id="received">
+        </ul>
+    </div>
+    <form id="form" action="">
+        <input id="input" autocomplete="off" /><button>Connexion</button>
+    </form>
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        var socket = io();
+
+        var received = document.getElementById('received');
+        var writting = document.getElementById("writing");
+        var inn = document.getElementsByTagName('input');
+        var input = document.getElementById('input');
+        var sent = document.getElementById('sent');
+        var form = document.getElementById('form');
+
+        const receiverId = '622f7fb2-52ca-4170-96ee-779b945f5ed3'
+        const myself = 'cadcb03c-bba6-41f4-8c42-67eca94f7973'
+        const createdAt = 1699748695664
+
+        input.addEventListener('input', function (e) {
+            e.preventDefault()
+            socket.emit('write', receiverId)
+        });
+
+        form.addEventListener('submit', async function (e) {
+            e.preventDefault();
+            if (input.value) {
+                var item = document.createElement('li')
+                item.textContent = input.value
+                sent.appendChild(item)
+
+                await socket.emit('message', JSON.stringify({
+                    type: "Message",
+                    fromWeb: true,
+                    data: {
+                        author: { id: myself },
+                        createdAt: Date.now().toString(),
+                        text: input.value
+                    },
+                    receiverId: receiverId
+                }))
+                input.value = ''
+
+            }
+        });
+
+        socket.on("write-" + myself, (sock) => {
+            writting.style.display = "block"
+            setTimeout(() => {
+                writting.style.display = "none";
+            }, 3000)
+        })
+
+        socket.on(myself, (msg) => {
+            console.log("i've got a message");
+            var item = document.createElement('li');
+            item.textContent = msg.data.text;
+            received.appendChild(item);
+        });
+    </script>
+</body>
+
+</html>

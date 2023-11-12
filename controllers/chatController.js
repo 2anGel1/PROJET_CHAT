@@ -66,7 +66,7 @@ exports.storeMessage = async (req, res) => {
 
         var chat = await Chat.findFirst({
             where: {
-                OR:[
+                OR: [
                     {
                         user1_id: user1_id,
                         user2_id: user2_id
@@ -76,7 +76,7 @@ exports.storeMessage = async (req, res) => {
                         user2_id: user1_id
                     }
                 ]
-              
+
             }
         })
 
@@ -92,17 +92,19 @@ exports.storeMessage = async (req, res) => {
             })
         }
 
-        const message = await Message.create({
+        await Message.create({
             data: {
-                chat_id: chat.id,
+                receiver_id: user2_id,
                 content: textmessage,
-                createdAt: createdAt
+                createdAt: createdAt,
+                author_id: user1_id,
+                chat_id: chat.id,
             }
         })
 
         // console.log(chat);
         console.log("Stored");
-        return {status: true};
+        return { status: true };
     } catch (error) {
         console.error(error)
         res.status(500).json({ error: error.message })
