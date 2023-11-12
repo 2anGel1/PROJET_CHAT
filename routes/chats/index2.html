@@ -2,7 +2,7 @@
 <html>
 
 <head>
-    <title>Socket.IO CHAT 2</title>
+    <title>Socket.IO CHAT1</title>
     <style>
         body {
             margin: 0;
@@ -14,6 +14,7 @@
             background: rgba(0, 0, 0, 0.15);
             padding: 0.25rem;
             position: fixed;
+            width: 100%;
             bottom: 0;
             left: 0;
             right: 0;
@@ -44,27 +45,34 @@
         }
 
         #form>button {
+            border-radius: 3px;
             background: #333;
-            border: none;
             padding: 0 1rem;
             margin: 0.25rem;
-            border-radius: 3px;
             outline: none;
+            border: none;
             color: #fff;
         }
 
-        .messages {
+        #messages {
             list-style-type: none;
+            width: 100%;
             margin: 0;
             padding: 0;
         }
 
-        .messages>li {
+        #messages>li {
             padding: 0.5rem 1rem;
         }
 
-        .messages>li:nth-child(odd) {
-            background: #efefef;
+        .sent {
+            background: #77CC99;
+            text-align: end;
+        }
+
+        .received {
+            background: #22AC99;;
+            text-align: start;
         }
 
         #box-message {
@@ -79,9 +87,8 @@
 
 <body>
     <div id="box-message">
-        <ul class="messages" id="sent">
-        </ul>
-        <ul class="messages" id="received">
+        <ul id="messages">
+
         </ul>
     </div>
     <form id="form" action="">
@@ -90,30 +97,68 @@
     </form>
     <script src="/socket.io/socket.io.js"></script>
     <script>
+        function run(id) {
+
+            // Creating Our XMLHttpRequest object 
+            let xhr = new XMLHttpRequest();
+
+            // Making our connection  
+            let url = 'http://127.0.0.1:3000/api/chats/' + id;
+            xhr.open("GET", url, true);
+
+            // function execute after request is successful 
+            xhr.onreadystatechange = async function () {
+                if (this.readyState == 4 && this.status == 200) {
+                    const data = JSON.parse(this.responseText).data;
+                    var msgs = data[0].messages;
+
+                    var messages = document.getElementById('messages');
+                    await msgs.sort(function (a, b) {
+                        return a.createdAt - b.createdAt;
+                    });
+                    msgs.forEach(mess => {
+                        var item = document.createElement('li');
+                        if (mess.author_id == id) {
+                            item.classList.add('sent');
+                        } else {
+                            item.classList.add('received');
+                        }
+                        item.textContent = mess.content;
+                        messages.appendChild(item);
+                    });
+                }
+            }
+            // Sending our request 
+            xhr.send();
+        }
+    </script>
+    <script>
         var socket = io();
 
-        var sent = document.getElementById('sent');
-        var received = document.getElementById('received');
-        var form = document.getElementById('form');
+        var messages = document.getElementById('messages');
+        var writting = document.getElementById("writing");
         var input = document.getElementById('input');
-        var inn = document.getElementsByTagName('input')
-        var writting = document.getElementById("writing")
+        var form = document.getElementById('form');
 
-        const receiverId = '6dea15c5-f37c-4125-a925-fa89e8834455'
-        const myself = '622f7fb2-52ca-4170-96ee-779b945f5ed3'
-        const createdAt = 1699748695664
+        const receiverId = 'be188eb5-f41d-425b-9487-758e84b1056b';
+        const myself = '3a736d82-885c-4c9b-a812-f172f2b2a02a';
+
+        run(myself);
+
+        socket.emit("info", JSON.stringify({ user_id: myself }));
 
         input.addEventListener('input', function (e) {
-            e.preventDefault()
-            socket.emit('write', receiverId)
+            e.preventDefault();
+            socket.emit('write-', receiverId);
         });
 
         form.addEventListener('submit', async function (e) {
             e.preventDefault();
             if (input.value) {
-                var item = document.createElement('li')
-                item.textContent = input.value
-                sent.appendChild(item)
+                var item = document.createElement('li');
+                item.classList.add('sent');
+                item.textContent = input.value;
+                messages.appendChild(item);
 
                 await socket.emit('message', JSON.stringify({
                     type: "Message",
@@ -124,24 +169,23 @@
                         text: input.value
                     },
                     receiverId: receiverId
-                }))
-                input.value = ''
-
+                }));
+                input.value = '';
             }
         });
 
         socket.on("write-" + myself, (sock) => {
-            writting.style.display = "block"
+            writting.style.display = "block";
             setTimeout(() => {
                 writting.style.display = "none";
             }, 3000)
-        })
+        });
 
         socket.on(myself, (msg) => {
-            console.log("i've got a message");
             var item = document.createElement('li');
+            item.classList.add('received');
             item.textContent = msg.data.text;
-            received.appendChild(item);
+            messages.appendChild(item);
         });
     </script>
 </body>

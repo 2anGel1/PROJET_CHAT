@@ -41,5 +41,8 @@ router.get('/chat', (req, res) => {
 router.get('/chat2', (req, res) => {
     res.sendFile(__dirname + "/chats/index2.html")
 })
+router.get('/login', (req, res) => {
+    res.sendFile(__dirname + "/chats/login.html")
+})
 
 module.exports = router;

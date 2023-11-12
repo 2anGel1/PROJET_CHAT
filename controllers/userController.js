@@ -1,3 +1,5 @@
+const { PricingV2TrunkingCountryInstanceTerminatingPrefixPrices } = require("twilio/lib/rest/pricing/v2/voice/country.js")
+
 const User = require("../lib/prisma.js").user
 
 /* --------------------CRUD----------------------- */
@@ -7,10 +9,11 @@ exports.getAll = async (req, res) => {
         console.log("geting all users")
         const data = await User.findMany({
             select: {
-                id: true,
+                phone_number: true,
                 firstname: true,
                 lastname: true,
-                phone_number: true,
+                status: true,
+                id: true,
             }
         })
 
@@ -70,7 +73,45 @@ exports.deleteUser = async (req, res) => {
     }
 }
 
+exports.getOne = async (req, res) => {
+    try {
+        console.log("getting user...")
+
+        const user = await User.findFirst({
+            where: {
+                id: req.body.user_id
+            }
+        })
+
+        return {
+            status: true,
+            data: user
+        };
+    } catch (error) {
+        res.status(500).json({ error: error.message })
+    }
+}
+
 /* --------------------AUTH----------------------- */
+exports.openSession = async (req, res) => {
+    try {
+        console.log("connecting user with id <<" + req.body.user_id + ">>")
+
+        await User.update({
+            where: {
+                id: req.body.user_id
+            },
+            data: {
+                status: "ONLINE"
+            }
+        })
+        return {
+            status: true,
+        };
+    } catch (error) {
+        return error.message;
+    }
+}
 
 exports.login = async (req, res) => {
     try {

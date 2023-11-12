@@ -25,7 +25,7 @@ exports.getUserChats = async (req, res) => {
                 ]
             },
             include: {
-                messages: true,
+                messages: true
             }
         })
 

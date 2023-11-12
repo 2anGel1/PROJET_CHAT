@@ -6,15 +6,12 @@
     <style>
         body {
             margin: 0;
-            padding-bottom: 3rem;
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
         }
 
         #form {
             background: rgba(0, 0, 0, 0.15);
-            padding: 0.25rem;
             position: fixed;
-            bottom: 0;
             left: 0;
             right: 0;
             display: flex;
@@ -23,17 +20,8 @@
             backdrop-filter: blur(10px);
         }
 
-        #writing {
-            position: fixed;
-            bottom: 35px;
-            left: 5px;
-            right: 0;
-            display: none;
-        }
-
         #input {
             border: none;
-            padding: 0 1rem;
             flex-grow: 1;
             border-radius: 2rem;
             margin: 0.25rem;
@@ -52,63 +40,25 @@
             outline: none;
             color: #fff;
         }
-
-        .messages {
-            list-style-type: none;
-            margin: 0;
-            padding: 0;
-        }
-
-        .messages>li {
-            padding: 0.5rem 1rem;
-        }
-
-        .messages>li:nth-child(odd) {
-            background: #efefef;
-        }
-
-        #box-message {
-            width: 100%;
-            height: 100px;
-            display: flex;
-            flex-direction: row;
-            justify-content: space-between;
-        }
     </style>
 </head>
 
 <body>
-    <div id="box-message">
-        <ul class="messages" id="sent">
-        </ul>
-        <ul class="messages" id="received">
-        </ul>
-    </div>
     <form id="form" action="">
-        <input id="input" autocomplete="off" /><button>Connexion</button>
+        <input id="input" autocomplete="off" />
+        <button>Connexion</button>
     </form>
     <script src="/socket.io/socket.io.js"></script>
     <script>
         var socket = io();
-
         var input = document.getElementById('input');
         var form = document.getElementById('form');
 
-        const receiverId = '622f7fb2-52ca-4170-96ee-779b945f5ed3'
         const myself = 'cadcb03c-bba6-41f4-8c42-67eca94f7973'
-
-        input.addEventListener('input', function (e) {
-            e.preventDefault()
-            socket.emit('write', receiverId)
-        });
 
         form.addEventListener('submit', async function (e) {
             e.preventDefault();
             if (input.value) {
-                var item = document.createElement('li')
-                item.textContent = input.value
-                sent.appendChild(item)
-
                 await socket.emit('message', JSON.stringify({
                     type: "Message",
                     fromWeb: true,
