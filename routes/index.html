@@ -100,7 +100,7 @@
         var writting = document.getElementById("writing")
 
         const receiverId = '74ac92cb-f2ff-4bf1-8ee5-86ed9b63b16b'
-        const myself = '6798c0e5-0477-4f21-8bf7-292e275f7464'
+        const myself = '622f7fb2-52ca-4170-96ee-779b945f5ed3'
 
         input.addEventListener('input', function (e) {
             e.preventDefault()
@@ -130,9 +130,10 @@
         })
 
         socket.on(myself, (msg) => {
-            var item = document.createElement('li');
-            item.textContent = msg;
-            received.appendChild(item);
+            console.log("i've got a message");
+            // var item = document.createElement('li');
+            // item.textContent = msg;
+            // received.appendChild(item);
         });
     </script>
 </body>
