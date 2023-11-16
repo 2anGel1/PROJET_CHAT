@@ -107,6 +107,14 @@ exports.storeMessage = async (req, res) => {
             })
         }
 
+        const u = await User.findFirst({
+            where: {
+                id: user2_id
+            }
+        });
+
+        const online = u.status == 'ONLINE';
+
         await Message.create({
             data: {
                 receiver_id: user2_id,
@@ -114,7 +122,7 @@ exports.storeMessage = async (req, res) => {
                 createdAt: createdAt,
                 author_id: user1_id,
                 chat_id: chat.id,
-
+                status: online ? "DISPLAYED": "SENT"
             }
         })
 

@@ -80,6 +80,14 @@ exports.setOtherStatus = async (req, res) => {
             where: {
                 chat_id: chat_id,
                 receiver_id: user_id,
+                OR: [
+                    {
+                        status: "SENT"
+                    },
+                    {
+                        status: "DISPLAYED"
+                    }
+                ]
             },
             data: {
                 status: status

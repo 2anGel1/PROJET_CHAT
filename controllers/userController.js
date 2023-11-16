@@ -93,16 +93,19 @@ exports.getOne = async (req, res) => {
 }
 
 /* --------------------AUTH----------------------- */
-exports.openSession = async (req, res) => {
+exports.updateSession = async (req, res) => {
     try {
-        console.log("connecting user with id <<" + req.body.user_id + ">>")
+        if(req.body.action == "ONLINE")
+            console.log("connecting user with id <<" + req.body.user_id + ">>")
+        else
+            console.log("disconnecting user with id <<" + req.body.user_id + ">>")
 
         await User.update({
             where: {
                 id: req.body.user_id
             },
             data: {
-                status: "ONLINE"
+                status: req.body.action
             }
         })
         return {
@@ -203,8 +206,7 @@ exports.signup = async (req, res) => {
 exports.logout = async (req, res) => {
     try {
         console.log("logging out user")
-        // console.log(req.body)
-        const user = await User.update({
+        await User.update({
             where: {
                 id: req.params.user_id,
             },
