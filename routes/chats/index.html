@@ -144,22 +144,23 @@
         var input = document.getElementById('input');
         var form = document.getElementById('form');
 
-        const receiverId = 'be188eb5-f41d-425b-9487-758e84b1056b';
-        const myself = 'ab6bcde9-4799-445c-86a8-46965339e588';
+        const receiverId = '767873e0-5e0c-43b2-a1c3-2df2fafa61aa';
+        const myself = 'b473698d-b82e-478c-9909-34661d983247';
 
         run(myself);
 
-        socket.emit("info", JSON.stringify({ user_id: myself }));
+        socket.emit("user_connect", JSON.stringify({ user_id: myself }));
 
         socket.emit("seen", JSON.stringify({
-            chat_id: "9a2ccee7-0a67-4be9-9497-28374b12f0ba",
-            user_id: receiverId
+            chat_id: "3965f051-f5fa-4d80-80c5-d6014e44c094",
+            user_id: myself,
+            other_id: receiverId
         }));
 
-        input.addEventListener('input', function (e) {
-            e.preventDefault();
-            socket.emit('write-', receiverId);
-        });
+        // input.addEventListener('input', function (e) {
+        //     e.preventDefault();
+        //     socket.emit('write-', receiverId);
+        // });
 
         form.addEventListener('submit', async function (e) {
             e.preventDefault();
@@ -183,18 +184,17 @@
             }
         });
 
-        socket.on("write-" + myself, (sock) => {
-            writting.style.display = "block";
-            setTimeout(() => {
-                writting.style.display = "none";
-            }, 3000)
-        });
-
         socket.on(myself, (msg) => {
             var item = document.createElement('div');
             item.classList.add('received');
             item.textContent = msg.data.text;
             messages.appendChild(item);
+
+            socket.emit("seen", JSON.stringify({
+                chat_id: "3965f051-f5fa-4d80-80c5-d6014e44c094",
+                user_id: myself,
+                other_id: receiverId
+            }));
         });
     </script>
 </body>
