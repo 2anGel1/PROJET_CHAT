@@ -28,7 +28,7 @@ model Chat {
 
 model Message {
   id          String  @id @default(uuid())
-  content     String  @db.Text
+  content     String  @db.LongText
   chat_id     String
   author_id   String
   receiver_id String

@@ -24,15 +24,6 @@ router.get("/chats/:user_id", ChatController.getUserChats);
 router.post("/chats/send", ChatController.storeMessage);
 
 
-/* --------------------MESSAGE ROUTES----------------------- */
-
-// CRUD
-router.delete("/messages/:message_id", MessageController.deleteMessage);
-router.get("/messages/:message_id", MessageController.getOndeById);
-router.get("/messages", MessageController.getAll);
-router.post("/messages", MessageController.add);
-
-
 
 // CHAT PAGE
 router.get('/chat', (req, res) => {

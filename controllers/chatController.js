@@ -1,6 +1,6 @@
 const { chatsOnUsers, message } = require("../lib/prisma.js")
 
-const Message = require("../lib/prisma.js").Message
+const Message = require("../lib/prisma.js").message
 const Chat = require("../lib/prisma.js").chat
 const User = require("../lib/prisma.js").user
 

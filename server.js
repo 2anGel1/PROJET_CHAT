@@ -42,8 +42,6 @@ const server = http.createServer(app)
 const io = new Server(server)
 require('./lib/websocket').handleSocket(io);
 
-
-
 server.on("error", errorHandler);
 server.on("listening", () => {
     const address = server.address();
