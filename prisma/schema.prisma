@@ -33,6 +33,7 @@ model Message {
   author_id   String
   receiver_id String
   status      MStatus @default(SENT)
+  type        MType   @default(TEXT)
   chat        Chat    @relation(fields: [chat_id], references: [id])
   createdAt   String
 }
@@ -46,4 +47,11 @@ enum MStatus {
 enum UStatus {
   ONLINE
   OFFLINE
+}
+
+enum MType {
+  IMAGE
+  AUDIO
+  TEXT
+  FILE
 }

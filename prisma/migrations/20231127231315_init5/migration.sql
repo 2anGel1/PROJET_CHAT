@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE `Message` ADD COLUMN `type` ENUM('IMAGE', 'AUDIO', 'TEXT', 'FILE') NOT NULL DEFAULT 'TEXT';

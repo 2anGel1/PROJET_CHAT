@@ -78,6 +78,7 @@ exports.storeMessage = async (req, res) => {
         const createdAt = req.body.createdAt
         const user2_id = req.body.receiver
         const user1_id = req.body.author
+        const type = req.body.type
 
         var chat = await Chat.findFirst({
             where: {
@@ -117,12 +118,13 @@ exports.storeMessage = async (req, res) => {
 
         await Message.create({
             data: {
+                status: online ? "DISPLAYED": "SENT",
                 receiver_id: user2_id,
                 content: textmessage,
                 createdAt: createdAt,
                 author_id: user1_id,
                 chat_id: chat.id,
-                status: online ? "DISPLAYED": "SENT"
+                type: type
             }
         })
 
