@@ -93,6 +93,7 @@ exports.getOne = async (req, res) => {
 }
 
 /* --------------------AUTH----------------------- */
+
 exports.updateSession = async (req, res) => {
     try {
         if(req.body.action == "ONLINE")
